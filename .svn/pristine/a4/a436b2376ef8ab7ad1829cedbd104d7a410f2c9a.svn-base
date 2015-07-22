@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>00F4F37E-7DB7-4169-8E3D-F74338F4516D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ADLWeiChe</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1F0FE019EA6AD795C6C0C18AD477715D1BCBCB08</key>
+		<string>https://github.com/AndiBoyan/ADLWeiChe.git</string>
+		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
+		<string>https://192.168.1.200:8443/svn/tianju_ios/ADLWeiChe</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ADLWeiChe.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1F0FE019EA6AD795C6C0C18AD477715D1BCBCB08</key>
+		<string>../../../ADLWeiChe</string>
+		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
+		<string>https://192.168.1.200:8443/svn/tianju_ios</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://192.168.1.200:8443/svn/tianju_ios/ADLWeiChe/ADLWeiChe.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ADL</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1F0FE019EA6AD795C6C0C18AD477715D1BCBCB08</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ADLWeiChe</string>
+		</dict>
+	</array>
+</dict>
+</plist>
