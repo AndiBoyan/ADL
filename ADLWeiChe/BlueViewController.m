@@ -832,8 +832,8 @@ updatingLocation:(BOOL)updatingLocation
             isSwap = YES;
         }
     }
-    NSDate *date8 = [self getCustomDateWithHour:fromHour andMinute:fromMin];
-    NSDate *date23 = [self getCustomDateWithHour:toHour andMinute:toMin];
+    NSDate *date8 = [NSDate dateWithTimeInterval:-60 sinceDate:[self getCustomDateWithHour:fromHour andMinute:fromMin]];//[self getCustomDateWithHour:fromHour andMinute:fromMin];
+    NSDate *date23 = [NSDate dateWithTimeInterval:+60 sinceDate:[self getCustomDateWithHour:toHour andMinute:toMin]];//[self getCustomDateWithHour:toHour andMinute:toMin];
     NSDate *currentDate = [NSDate date];
     if ([currentDate compare:date8]==NSOrderedDescending && [currentDate compare:date23]==NSOrderedAscending)
     {
