@@ -1046,6 +1046,7 @@ updatingLocation:(BOOL)updatingLocation
             int fromMin = [startTime substringWithRange:NSMakeRange(3, 2)].intValue;
             int endHour = [endTime substringWithRange:NSMakeRange(0, 2)].intValue;
             int endMin = [endTime substringWithRange:NSMakeRange(3, 2)].intValue;
+            NSLog(@"当前是否处于感应时间段：(1=处于/0=不处于):%d",[self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]);
             if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&isTunnel) {
                 [self periperalCmd:@"F101010100" length:13];
             }
