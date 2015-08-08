@@ -353,6 +353,7 @@ updatingLocation:(BOOL)updatingLocation
     if (rssi != nil) {
         slider.value = rssi.floatValue;
     }
+    RSSIValue = slider.value;
     
     [slider addTarget:self action:@selector(updataValue:) forControlEvents:UIControlEventValueChanged];
     [settingView addSubview:slider];
@@ -980,8 +981,13 @@ updatingLocation:(BOOL)updatingLocation
 
 //退出蓝牙
 -(void)viewWillDisappear:(BOOL)animated{
+
+     [readRSSITime setFireDate:[NSDate distantFuture]];
+     [tunnelTime setFireDate:[NSDate distantFuture]];
+     [carStateTime setFireDate:[NSDate distantFuture]];
+     
+    [self.centralMgr cancelPeripheralConnection:_discoveredPeripheral];
     
-    // [self.centralMgr cancelPeripheralConnection:_discoveredPeripheral];
 }
 
 //连接失败
@@ -1032,6 +1038,7 @@ updatingLocation:(BOOL)updatingLocation
     _discoveredPeripheral.delegate = self;
     [_discoveredPeripheral readRSSI];
 }
+
 - (void)peripheralDidUpdateRSSI:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"%f",fabsf([peripheral.RSSI floatValue]));
     if (fabsf([peripheral.RSSI floatValue]) < RSSIValue ) {
@@ -1046,7 +1053,7 @@ updatingLocation:(BOOL)updatingLocation
             int fromMin = [startTime substringWithRange:NSMakeRange(3, 2)].intValue;
             int endHour = [endTime substringWithRange:NSMakeRange(0, 2)].intValue;
             int endMin = [endTime substringWithRange:NSMakeRange(3, 2)].intValue;
-            NSLog(@"当前是否处于感应时间段：(1=处于/0=不处于):%d",[self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]);
+         
             if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&isTunnel) {
                 [self periperalCmd:@"F101010100" length:13];
             }
