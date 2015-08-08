@@ -1041,7 +1041,7 @@ updatingLocation:(BOOL)updatingLocation
 
 - (void)peripheralDidUpdateRSSI:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"%f",fabsf([peripheral.RSSI floatValue]));
-    if (fabsf([peripheral.RSSI floatValue]) < RSSIValue ) {
+    if (fabsf([peripheral.RSSI floatValue]) <= RSSIValue ) {
         //处于感应区
         if (RSSIState != 1) {
             RSSIState = 1;
@@ -1057,15 +1057,15 @@ updatingLocation:(BOOL)updatingLocation
             if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&isTunnel) {
                 [self periperalCmd:@"F101010100" length:13];
             }
-            if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
+            else if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
                 [self periperalCmd:@"F101010000" length:13];
             }
-            if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
+            else if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
                 [self periperalCmd:@"F100010100" length:13];
             }
         }
     }
-    if (fabsf([peripheral.RSSI floatValue]) > RSSIValue+10 ) {
+    if (fabsf([peripheral.RSSI floatValue]) > RSSIValue ) {
         //离开感应区
         if (RSSIState == 1) {
             RSSIState = 0;
