@@ -679,10 +679,10 @@ updatingLocation:(BOOL)updatingLocation
         if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&isTunnel) {
             [self periperalCmd:@"F101010100" length:13];
         }
-        if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
+        else if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
             [self periperalCmd:@"F101010000" length:13];
         }
-        if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
+        else if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
             [self periperalCmd:@"F100010100" length:13];
         }
         NSString *autoImageName = [NSString stringWithFormat:@"autoON-%.0f.png",h];
