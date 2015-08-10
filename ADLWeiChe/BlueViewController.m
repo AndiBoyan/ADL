@@ -1010,7 +1010,7 @@ updatingLocation:(BOOL)updatingLocation
     [obsBleStateButton setBackgroundImage:bleStateImageBtn forState:UIControlStateNormal];//定义背景图片
     [_discoveredPeripheral setDelegate:self];
     [_discoveredPeripheral discoverServices:nil];
-    
+    readRSSITime = nil;
     readRSSITime = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(detectRSSI) userInfo:nil repeats:YES];
     [carStateTime setFireDate:[NSDate distantPast]];
     
