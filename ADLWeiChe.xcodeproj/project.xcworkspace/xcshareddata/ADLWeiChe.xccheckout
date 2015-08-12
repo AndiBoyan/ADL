@@ -10,58 +10,37 @@
 	<string>ADLWeiChe</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>1F0FE019EA6AD795C6C0C18AD477715D1BCBCB08</key>
-		<string>https://github.com/AndiBoyan/ADLWeiChe.git</string>
-		<key>95BA721BCBE3C6C4269559792124BC50D2108097</key>
-		<string>https://github.com/AndiBoyan/ADL.git</string>
 		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
-		<string>https://192.168.1.200:8443/svn/tianju_ios/ADLWeiChe</string>
+		<string>https://192.168.1.200:8443/svn/tianju_ios</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>ADLWeiChe.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>1F0FE019EA6AD795C6C0C18AD477715D1BCBCB08</key>
-		<string>../../../ADLWeiChe</string>
-		<key>95BA721BCBE3C6C4269559792124BC50D2108097</key>
+		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
 		<string>../..</string>
-		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
-		<string>../../../ADL</string>
-	</dict>
-	<key>IDESourceControlProjectRepositoryRootDictionary</key>
-	<dict>
-		<key>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</key>
-		<string>https://192.168.1.200:8443/svn/tianju_ios</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/AndiBoyan/ADL.git</string>
+	<string>https://192.168.1.200:8443/svn/tianju_ios</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>95BA721BCBE3C6C4269559792124BC50D2108097</string>
+	<string>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ADLwork</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.subversion</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>fa7fc470-5ae3-1b4f-943c-057bdcfc2967++9439</string>
-			<key>IDESourceControlWCCName</key>
-			<string>ADL</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>1F0FE019EA6AD795C6C0C18AD477715D1BCBCB08</string>
-			<key>IDESourceControlWCCName</key>
-			<string>ADLWeiChe</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>95BA721BCBE3C6C4269559792124BC50D2108097</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ADLwork</string>
 		</dict>

@@ -57,6 +57,8 @@
     int bleConnectState;
     int vehicleControl;
     int bleSetDone;
+    
+    BOOL isConnect;
 }
 
 @property UITableView *bletableView;
@@ -97,7 +99,10 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     tunnelTime = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(tunnel) userInfo:nil repeats:YES];
     [tunnelTime setFireDate:[NSDate distantFuture]];
-    
+    readRSSITime = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(detectRSSI) userInfo:nil repeats:YES];
+    [readRSSITime setFireDate:[NSDate distantFuture]];
+    carStateTime = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(readCarState) userInfo:nil repeats:YES];
+    [carStateTime setFireDate:[NSDate distantFuture]];
     self.bleAry = [[NSMutableArray alloc]init];
     
     
@@ -128,6 +133,14 @@
 
 -(void)back
 {
+    if(_discoveredPeripheral != nil)
+    {
+        [self.centralMgr cancelPeripheralConnection:_discoveredPeripheral];
+        isConnect = YES;
+    }
+    [readRSSITime setFireDate:[NSDate distantFuture]];
+    [tunnelTime setFireDate:[NSDate distantFuture]];
+    [carStateTime setFireDate:[NSDate distantFuture]];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)tunnel
@@ -137,7 +150,7 @@
     AMapPlaceSearchRequest *poiRequest = [[AMapPlaceSearchRequest alloc] init];
     poiRequest.searchType = AMapSearchType_PlaceAround;
     //23.536678 113.311437 23.536678 113.311437
-    poiRequest.location = [AMapGeoPoint locationWithLatitude:23.5390882478 longitude:113.3105027174];
+    poiRequest.location = [AMapGeoPoint locationWithLatitude:lastlat longitude:lastlon];
     poiRequest.radius = 200;
     poiRequest.types = @[@"190310"];
     poiRequest.requireExtension = YES;
@@ -353,6 +366,7 @@ updatingLocation:(BOOL)updatingLocation
     if (rssi != nil) {
         slider.value = rssi.floatValue;
     }
+    RSSIValue = slider.value;
     
     [slider addTarget:self action:@selector(updataValue:) forControlEvents:UIControlEventValueChanged];
     [settingView addSubview:slider];
@@ -598,8 +612,7 @@ updatingLocation:(BOOL)updatingLocation
         doBtn.frame = CGRectMake(290.5, 240, 40, 30);
     }
     settingViewBackground.frame = CGRectMake(0, 0, settingView.frame.size.width, settingView.frame.size.height);
-    carStateTime = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(readCarState) userInfo:nil repeats:YES];
-    [carStateTime setFireDate:[NSDate distantFuture]];
+
 }
 
 #pragma mark 控制指令
@@ -650,17 +663,18 @@ updatingLocation:(BOOL)updatingLocation
     }
     float h = [UIScreen mainScreen].bounds.size.height;
     if (autoSelect == 0) {
-        [self periperalCmd:@"F100000001" length:13];
+        [self periperalCmd:@"F300" length:10];
+       // [self periperalCmd:@"F100000001" length:13];
         NSString *autoImageName = [NSString stringWithFormat:@"autoOFF-%.0f.png",h];
         UIImage *aotuImage = [UIImage imageNamed:autoImageName];
         UIImage *autoImageBtn = [aotuImage stretchableImageWithLeftCapWidth:12 topCapHeight:0];
         [obsAutoButton setBackgroundImage:autoImageBtn forState:UIControlStateNormal];//定义背景图片
         autoSelect = 1;
-        [readRSSITime setFireDate:[NSDate distantFuture]];
     }
     else
     {
         autoSelect = 0;
+        [self periperalCmd:@"F301" length:10];
         NSUserDefaults *startData = [NSUserDefaults standardUserDefaults];
         NSString *startTime = [startData objectForKey:@"StartTime"];
         if (startTime == nil) {
@@ -671,24 +685,23 @@ updatingLocation:(BOOL)updatingLocation
         if (endTime == nil) {
             return;
         }
-        int fromHour = [startTime substringWithRange:NSMakeRange(0, 2)].intValue;
+        /*int fromHour = [startTime substringWithRange:NSMakeRange(0, 2)].intValue;
         int fromMin = [startTime substringWithRange:NSMakeRange(3, 2)].intValue;
         int endHour = [endTime substringWithRange:NSMakeRange(0, 2)].intValue;
         int endMin = [endTime substringWithRange:NSMakeRange(3, 2)].intValue;
         if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&isTunnel) {
             [self periperalCmd:@"F101010100" length:13];
         }
-        if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
+        else if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
             [self periperalCmd:@"F101010000" length:13];
         }
-        if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
+        else if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
             [self periperalCmd:@"F100010100" length:13];
-        }
+        }*/
         NSString *autoImageName = [NSString stringWithFormat:@"autoON-%.0f.png",h];
         UIImage *aotuImage = [UIImage imageNamed:autoImageName];
         UIImage *autoImageBtn = [aotuImage stretchableImageWithLeftCapWidth:12 topCapHeight:0];
         [obsAutoButton setBackgroundImage:autoImageBtn forState:UIControlStateNormal];//定义背景图片
-        [readRSSITime setFireDate:[NSDate distantPast]];
     }
 }
 
@@ -832,8 +845,8 @@ updatingLocation:(BOOL)updatingLocation
             isSwap = YES;
         }
     }
-    NSDate *date8 = [NSDate dateWithTimeInterval:-60 sinceDate:[self getCustomDateWithHour:fromHour andMinute:fromMin]];//[self getCustomDateWithHour:fromHour andMinute:fromMin];
-    NSDate *date23 = [NSDate dateWithTimeInterval:+60 sinceDate:[self getCustomDateWithHour:toHour andMinute:toMin]];//[self getCustomDateWithHour:toHour andMinute:toMin];
+    NSDate *date8 = [self getCustomDateWithHour:fromHour andMinute:fromMin];
+    NSDate *date23 = [self getCustomDateWithHour:toHour andMinute:toMin];
     NSDate *currentDate = [NSDate date];
     if ([currentDate compare:date8]==NSOrderedDescending && [currentDate compare:date23]==NSOrderedAscending)
     {
@@ -981,7 +994,7 @@ updatingLocation:(BOOL)updatingLocation
 //退出蓝牙
 -(void)viewWillDisappear:(BOOL)animated{
     
-    // [self.centralMgr cancelPeripheralConnection:_discoveredPeripheral];
+
 }
 
 //连接失败
@@ -1005,7 +1018,7 @@ updatingLocation:(BOOL)updatingLocation
     [_discoveredPeripheral setDelegate:self];
     [_discoveredPeripheral discoverServices:nil];
     
-    readRSSITime = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(detectRSSI) userInfo:nil repeats:YES];
+    [readRSSITime setFireDate:[NSDate distantPast]];
     [carStateTime setFireDate:[NSDate distantPast]];
     
 }
@@ -1020,6 +1033,9 @@ updatingLocation:(BOOL)updatingLocation
     carStateIV.image = [UIImage imageNamed:stateImageName];
     if (_discoveredPeripheral)
     {
+        if (isConnect) {
+            return;
+        }
         NSLog(@"connectPeripheral");
         [_centralMgr connectPeripheral:_discoveredPeripheral options:nil];
     }
@@ -1035,38 +1051,43 @@ updatingLocation:(BOOL)updatingLocation
 - (void)peripheralDidUpdateRSSI:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"%f",fabsf([peripheral.RSSI floatValue]));
     if (fabsf([peripheral.RSSI floatValue]) < RSSIValue ) {
+        NSUserDefaults *startData = [NSUserDefaults standardUserDefaults];
+        NSString *startTime = [startData objectForKey:@"StartTime"];
+        NSUserDefaults *endData = [NSUserDefaults standardUserDefaults];
+        NSString *endTime = [endData objectForKey:@"EndTime"];
+        int fromHour = [startTime substringWithRange:NSMakeRange(0, 2)].intValue;
+        int fromMin = [startTime substringWithRange:NSMakeRange(3, 2)].intValue;
+        int endHour = [endTime substringWithRange:NSMakeRange(0, 2)].intValue;
+        int endMin = [endTime substringWithRange:NSMakeRange(3, 2)].intValue;
         //处于感应区
-        if (RSSIState != 1) {
+        if (RSSIState == 0) {
             RSSIState = 1;
-            NSUserDefaults *startData = [NSUserDefaults standardUserDefaults];
-            NSString *startTime = [startData objectForKey:@"StartTime"];
-            NSUserDefaults *endData = [NSUserDefaults standardUserDefaults];
-            NSString *endTime = [endData objectForKey:@"EndTime"];
-            int fromHour = [startTime substringWithRange:NSMakeRange(0, 2)].intValue;
-            int fromMin = [startTime substringWithRange:NSMakeRange(3, 2)].intValue;
-            int endHour = [endTime substringWithRange:NSMakeRange(0, 2)].intValue;
-            int endMin = [endTime substringWithRange:NSMakeRange(3, 2)].intValue;
-            NSLog(@"当前是否处于感应时间段：(1=处于/0=不处于):%d",[self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]);
+            
             if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&isTunnel) {
                 [self periperalCmd:@"F101010100" length:13];
             }
-            if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
+            else if ([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]&&(isTunnel == NO)) {
                 [self periperalCmd:@"F101010000" length:13];
             }
-            if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
+            else if (([self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]==NO)&&isTunnel) {
                 [self periperalCmd:@"F100010100" length:13];
             }
         }
-    }
-    if (fabsf([peripheral.RSSI floatValue]) > RSSIValue+10 ) {
-        //离开感应区
-        if (RSSIState == 1) {
+        else if(RSSIState == 1)
+        {
             RSSIState = 0;
-            // NSLog(@"RSSS:%d",RSSIState);
-            [self periperalCmd:@"F100000000" length:13];
-            if (vehicleControl == 1) {
-                [self notification:@"原车控制打开，离开感应区"];
+            if (![self isBetweenFromHour:fromHour FromMinute:fromMin toHour:endHour toMinute:endMin]) {
+                 [self periperalCmd:@"F100000000" length:13];
             }
+        }
+    }
+    if (fabsf([peripheral.RSSI floatValue]) > RSSIValue ) {
+        //离开感应区
+        RSSIState = 0;
+        // NSLog(@"RSSS:%d",RSSIState);
+        [self periperalCmd:@"F100000000" length:13];
+        if (vehicleControl == 1) {
+            [self notification:@"原车控制打开，离开感应区"];
         }
     }
 }
@@ -1166,7 +1187,6 @@ updatingLocation:(BOOL)updatingLocation
             NSData *carLightData = [characteristic.value subdataWithRange:NSMakeRange(7, 1)];
             if ([carLightData isEqualToData:[self stringToByte:@"00"]]) {
                 //车灯关闭
-                NSLog(@"1");
                 NSString *stateImageName = [NSString stringWithFormat:@"carlightOFF-%.0f@2x",h];
                 carStateIV.image = [UIImage imageNamed:stateImageName];
             }
