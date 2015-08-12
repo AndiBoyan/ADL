@@ -137,10 +137,11 @@
     {
         [self.centralMgr cancelPeripheralConnection:_discoveredPeripheral];
         isConnect = YES;
+        [readRSSITime setFireDate:[NSDate distantFuture]];
+        [tunnelTime setFireDate:[NSDate distantFuture]];
+        [carStateTime setFireDate:[NSDate distantFuture]];
     }
-    [readRSSITime setFireDate:[NSDate distantFuture]];
-    [tunnelTime setFireDate:[NSDate distantFuture]];
-    [carStateTime setFireDate:[NSDate distantFuture]];
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)tunnel
@@ -994,11 +995,6 @@ updatingLocation:(BOOL)updatingLocation
 //退出蓝牙
 -(void)viewWillDisappear:(BOOL)animated{
 
-     [readRSSITime setFireDate:[NSDate distantFuture]];
-     [tunnelTime setFireDate:[NSDate distantFuture]];
-     [carStateTime setFireDate:[NSDate distantFuture]];
-     
-    [self.centralMgr cancelPeripheralConnection:_discoveredPeripheral];
 }
 
 //连接失败
